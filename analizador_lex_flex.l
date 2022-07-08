@@ -9,7 +9,7 @@ FILE *yyin;
 %option noyywrap
 %option yylineno
 
-/* Tocke */
+/* TOKENS */
 DIGITO          [0-9]
 LETRA           [a-zA-Z]
 ESPACIO         [" "]
@@ -20,13 +20,10 @@ COMA            [","]
 CHAR_PUNTO      ["."]
 PUNTOYCOMA      [";"]
 CHAR_DOSPUNTOS  [":"]
-
 IDENTIFICADOR   {LETRA}({LETRA}|{DIGITO}|{GUIONES})*
 CONST_INTEGER   (-?[1-9][0-9]{0,4})|0
 CONST_FLOAT     {DIGITO}{0,8}{CHAR_PUNTO}{DIGITO}{1,8}
 STRING          \"[^\n"]*\"
-
-/* Operadores lógicos y operadores aritméticos básicos */
 SUMA            ["+"]
 RESTA           ["-"]
 MULT            ["*"]
@@ -45,8 +42,6 @@ LLAVE_C         ["}"]
 PARENTESIS_A    ["("]
 PARENTESIS_C    [")"]
 FIN_SENTENCIA   [";"]
-
-/* Palabras reservadas */
 IF              "if"|"IF"
 WHILE           "while"|"WHILE"
 DECVAR          "DECVAR"
@@ -80,7 +75,6 @@ WRITE           "write"|"WRITE"
 {LLAVE_C}                   {printf("\n%d   LLAVE_C              %s", yylineno, yytext );}             
 {PARENTESIS_A}              {printf("\n%d   PARENTESIS_A         %s", yylineno, yytext );}
 {PARENTESIS_C}              {printf("\n%d   PARENTESIS_C         %s", yylineno, yytext );}
-
 {IF}                        {printf("\n%d   RESERVADA_IF:        %s", yylineno, yytext );}
 {WHILE}                     {printf("\n%d   RESERVADA_WHILE:     %s", yylineno, yytext );}
 {INTEGER}                   {printf("\n%d   RESERVADA_INTEGER:   %s", yylineno, yytext );}
@@ -90,21 +84,16 @@ WRITE           "write"|"WRITE"
 {ENDDEC}                    {printf("\n%d   RESERVADA_ENDDEC:    %s", yylineno, yytext );}
 {FLOAT}                     {printf("\n%d   RESERVADA_FLOAT:     %s", yylineno, yytext );}
 {INTEGER}                   {printf("\n%d   RESERVADA_INTEGER:   %s", yylineno, yytext );}
-
 {IDENTIFICADOR}             {printf("\n%d   IDENTIFICADOR        %s", yylineno, yytext );}
 %%
 
 int main (int argc, char *argv[]){
-    /*Abro el archivo en modo lectura y dejo apuntando el puntero yyvin que nos pide FLEX alli.*/
     if((yyin = fopen(argv[1], "rt")) ==  NULL){
-        printf("\nNo se puede abrir el archivo: %s\n", argv[1]);
         return 1;
     } 
     else{
-        printf("\nEl archivo %s se abrio correctamente\n", argv[1]);
         yylex();
     }
-    printf("\nFLEX finalizo la lectura del archivo %s \n", argv[1]);
     fclose(yyin);
     return 0;
 }
